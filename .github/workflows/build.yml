@@ -16,8 +16,12 @@ jobs:
       - name: Make files accessible to pandoc
         id: files_list
         run: |
-          echo "files=$(printf '"%s" ' main/*.md)"
           echo "files=$(printf '"%s" ' main/*.md)" > $GITHUB_OUTPUT
+
+      - name: Current date
+        id: date
+        run: echo "date=$(date +"%Y-%m-%d %H:%M")" > $GITHUB_OUTPUT
+      
 
       - uses: docker://pandoc/latex
         with:
@@ -31,7 +35,7 @@ jobs:
             -V geometry:margin=2cm
             --toc=true
             --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date="$(date +"%Y-%m-%d %H:%M")"
+            --metadata date=${{ steps.date.outputs.date }}
             -s
             -o out/script.pdf 
 
@@ -47,7 +51,7 @@ jobs:
             -V geometry:margin=2cm
             --toc=true
             --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date="$(date +"%Y-%m-%d %H:%M")"
+            --metadata date=${{ steps.date.outputs.date }}
             -s
             -o out/script.html
 
