@@ -24,8 +24,7 @@ jobs:
 
       - name: Install Fonts
         run: |
-          sudo apt install -y fonts-noto fonts-roboto
-          sudo apt install -y pandoc texlive-xetex fonts-noto
+          sudo apt install -y fonts-firacode fonts-roboto pandoc texlive-xetex
 
       - name: Convert Markdown to PDF
         run: |
