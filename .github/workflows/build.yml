@@ -10,6 +10,15 @@ jobs:
         with:
           path: main
 
+      - name: Cache APT packages
+        uses: actions/cache@v4
+        with:
+          path: /var/cache/apt/archives
+          key: ${{ runner.os }}-apt-cache
+
+      - name: Update APT
+        run: sudo apt update
+
       - name: Create output directory
         run: mkdir -p out
 
@@ -24,7 +33,7 @@ jobs:
 
       - name: Install Fonts
         run: |
-          sudo apt install -y fonts-firacode fonts-roboto pandoc texlive-xetex
+          sudo apt install -y --no-install-recommends fonts-firacode fonts-roboto pandoc texlive-xetex
 
       - name: Convert Markdown to PDF
         run: |
@@ -61,6 +70,9 @@ jobs:
         uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
           tag_name: latest
+          delete_release: true
+          delete_tag: true
+          skip_if_not_found: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
