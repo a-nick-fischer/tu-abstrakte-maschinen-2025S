@@ -3,6 +3,7 @@ Ein Prozessor "besteht" aus 2 verschiedenen Arten von Architekturen: **Befehlsar
 
 ## ISA
 References:
+
 - [ISA - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
 
 ---
@@ -15,6 +16,7 @@ Das erklärt dann im weiteren auch leicht den Unterschied zwischen ISA und Micro
 
 ### CISC, RISC, MISC, OISC, ...
 References:
+
 - [CISC - Wikipedia](https://en.wikipedia.org/wiki/Complex_instruction_set_computer)
 - [RISC - Wikipedia](https://en.wikipedia.org/wiki/Reduced_instruction_set_computer)
 - [MISC - Wikipedia](https://en.wikipedia.org/wiki/Minimal_instruction_set_computer)
@@ -54,6 +56,7 @@ Es gibt in Bezug zur ISA hier verschiedene ISA-"Gruppen" ("Design Philosophien")
 
 ## Microarchitecture
 References:
+
 - [Microarchitecture - Wikipedia](https://en.wikipedia.org/wiki/Microarchitecture)
 
 ---
@@ -66,6 +69,7 @@ Ein simples Beispiel für einen Unterschied in der Microarchitektur: Es gibt ver
 
 ### (Moderne) Implementierungs-Techniken
 References: 
+
 - [Microarchitecture#Microarchitectural\_concepts - Wikipedia](https://en.wikipedia.org/wiki/Microarchitecture#Microarchitectural_concepts)
 
 #### Pipelining
@@ -91,6 +95,7 @@ Kleine caches auf der CPU für schnelleren Zugriff als auf main RAM, heutzutage 
 
 #### Result forwarding (bypass)
 References:
+
 - [Operand forwarding - Wikipedia](https://en.wikipedia.org/wiki/Operand_forwarding)
 
 ---
@@ -103,6 +108,7 @@ Result forwarding bezieht sich aber nicht nur auf die ALU / auf die Execute Stag
 
 #### Register renaming
 References:
+
 - [Register renaming - Wikipedia](https://en.wikipedia.org/wiki/Register_renaming)
 
 ---
@@ -119,6 +125,7 @@ Falls richtig geraten wurde, hat man einen performance benefit, falls falsch ebe
 
 #### Reservation stations, history buffers, future files
 References:
+
 - [Reservation Station - Wikipedia](https://en.wikipedia.org/wiki/Reservation_station ) 
 
 ---
