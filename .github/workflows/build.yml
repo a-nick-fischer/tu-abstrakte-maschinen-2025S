@@ -67,14 +67,8 @@ jobs:
               -o out/script.html
 
       - name: Delete existing release (if it exists)
-        uses: dev-drprasad/delete-tag-and-release@v1.1
-        with:
-          tag_name: latest
-          delete_release: true
-          delete_tag: true
-          skip_if_not_found: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete latest -y --cleanup-tag
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
