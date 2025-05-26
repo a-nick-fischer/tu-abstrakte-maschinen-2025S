@@ -50,7 +50,7 @@ jobs:
             -s
             -o out/script.pdf 
         env:
-          /tmp
+          HOME: /tmp
 
       - uses: docker://pandoc/latex
         with:
@@ -68,7 +68,7 @@ jobs:
             -s
             -o out/script.html
         env:
-          /tmp
+          HOME: /tmp
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
