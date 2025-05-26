@@ -70,14 +70,6 @@ jobs:
         run: |
           gh release delete latest -y --cleanup-tag || true
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: latest
-          name: "Latest Release"
-          files: |
-            out/script.pdf
-            out/script.html
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release
+        run: |
+          gh release create --latest
