@@ -30,7 +30,7 @@ jobs:
       - name: Convert Markdown to PDF
         run: |
           pandoc \
-              -i *.md \
+              -i main/*.md \
               -f gfm \
               --pdf-engine=xelatex \
               -V mainfont="Roboto" \
@@ -45,7 +45,7 @@ jobs:
 
           # HTMl
           pandoc \
-              -i *.md \
+              -i main/*.md \
               -f gfm \
               --pdf-engine=xelatex \
               -V mainfont="Roboto" \
