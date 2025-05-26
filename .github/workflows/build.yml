@@ -37,7 +37,7 @@ jobs:
               -V monofont="Fira Code" \
               -V geometry:a4paper \
               -V geometry:margin=2cm \
-              --toc=true \
+              --toc \
               --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
               --metadata date="$(date +"%Y-%m-%d %H:%M")" \
               -s \
@@ -52,7 +52,7 @@ jobs:
               -V monofont="Fira Code" \
               -V geometry:a4paper \
               -V geometry:margin=2cm \
-              --toc=true \
+              --toc \
               --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
               --metadata date="$(date +"%Y-%m-%d %H:%M")" \
               -s \
