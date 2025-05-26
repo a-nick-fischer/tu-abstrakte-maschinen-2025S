@@ -65,6 +65,6 @@ jobs:
 
       - name: Create release
         run: |
-          gh release create latest
+          gh release create latest out/script.pdf out/script.html
         env:
           GH_TOKEN: ${{ github.token }}
