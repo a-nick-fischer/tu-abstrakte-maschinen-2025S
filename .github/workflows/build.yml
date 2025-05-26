@@ -22,15 +22,6 @@ jobs:
       - name: Create output directory
         run: mkdir -p out
 
-      - name: Make files accessible to pandoc
-        id: files_list
-        run: |
-          echo "files=$(printf '"%s" ' main/*.md)" >> $GITHUB_OUTPUT
-
-      - name: Current date
-        id: date
-        run: echo "date=$(date +"%Y-%m-%d %H:%M")" >> $GITHUB_OUTPUT
-
       - name: Install Fonts
         run: |
           sudo apt install -y fonts-firacode fonts-roboto pandoc texlive-xetex
@@ -38,7 +29,7 @@ jobs:
       - name: Convert Markdown to PDF
         run: |
           pandoc \
-              -i main/*.md \
+              -i *.md \
               -f gfm \
               --pdf-engine=xelatex \
               -V mainfont="Roboto" \
@@ -53,7 +44,7 @@ jobs:
 
           # HTMl
           pandoc \
-              -i main/*.md \
+              -i *.md \
               -f gfm \
               --pdf-engine=xelatex \
               -V mainfont="Roboto" \
