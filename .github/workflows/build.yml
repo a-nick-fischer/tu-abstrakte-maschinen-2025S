@@ -1,69 +1,38 @@
-name: Build Documents
+name: Pandoc build
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: push
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    
+  convert_via_pandoc:
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup pandoc
-        uses: setup-pandoc/action@v2
-        id: pandoc
+      - uses: docker://pandoc/core:3.5
         with:
-          texlive_version: '202103'
-      
-      - name: Install fonts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            fonts-roboto \
-            fonts-firacode
-            
-      - name: Create output directory
-        run: mkdir -p out
-        
-      - name: Run pandoc script
-        run: |
-          #!/usr/bin/env bash
-          
-          # A simple "build" script to combine all markdown files into a single pdf and html file
-          # PDF: Requires pdflatex
-          pandoc -i *.md \
-              -f gfm \
-              --pdf-engine=xelatex \
-              -V mainfont="Roboto" \
-              -V monofont="Fira Code" \
-              -V geometry:a4paper \
-              -V geometry:margin=2cm \
-              --toc=true \
-              --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
-              --metadata date="$(date +"%Y-%m-%d %H:%M")" \
-              -s \
-              -o out/script.pdf 
-
-          # HTMl
-          pandoc -i *.md \
-              -f gfm \
-              --pdf-engine=xelatex \
-              -V mainfont="Roboto" \
-              -V monofont="Fira Code" \
-              -V geometry:a4paper \
-              -V geometry:margin=2cm \
-              --toc=true \
-              --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
-              --metadata date="$(date +"%Y-%m-%d %H:%M")" \
-              -s \
-              -o out/script.html
-          
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+          args: >-  # allows you to break string into multiple lines
+            -i *.md
+            -f gfm
+            --pdf-engine=xelatex
+            -V mainfont="Roboto"
+            -V monofont="Fira Code"
+            -V geometry:a4paper
+            -V geometry:margin=2cm
+            --toc=true
+            --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
+            --metadata date="$(date +"%Y-%m-%d %H:%M")"
+            -s
+            -o out/script.pdf 
+      - uses: docker://pandoc/core:3.5
         with:
-          name: documents
-          path: out/
+          args: >-  # allows you to break string into multiple lines
+            -i *.md
+            -f gfm
+            --pdf-engine=xelatex
+            -V mainfont="Roboto"
+            -V monofont="Fira Code"
+            -V geometry:a4paper
+            -V geometry:margin=2cm
+            --toc=true
+            --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
+            --metadata date="$(date +"%Y-%m-%d %H:%M")"
+            -s
+            -o out/script.html

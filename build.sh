@@ -2,7 +2,8 @@
 
 # A simple "build" script to combine all markdown files into a single pdf and html file
 # PDF: Requires pdflatex
-pandoc -i *.md \
+pandoc \
+	-i *.md \
     -f gfm \
     --pdf-engine=xelatex \
     -V mainfont="Roboto" \
@@ -16,7 +17,8 @@ pandoc -i *.md \
     -o out/script.pdf 
 
 # HTMl
-pandoc -i *.md \
+pandoc \
+	-i *.md \
     -f gfm \
     --pdf-engine=xelatex \
     -V mainfont="Roboto" \
