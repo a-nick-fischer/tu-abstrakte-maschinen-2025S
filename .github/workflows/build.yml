@@ -16,11 +16,11 @@ jobs:
       - name: Make files accessible to pandoc
         id: files_list
         run: |
-          echo "files=$(printf '"%s" ' main/*.md)" > $GITHUB_OUTPUT
+          echo "files=$(printf '"%s" ' main/*.md)" >> $GITHUB_OUTPUT
 
       - name: Current date
         id: date
-        run: echo "date=$(date +"%Y-%m-%d %H:%M")" > $GITHUB_OUTPUT
+        run: echo "date=$(date +"%Y-%m-%d %H:%M")" >> $GITHUB_OUTPUT
       
 
       - uses: docker://pandoc/latex
