@@ -57,15 +57,21 @@ jobs:
               -s \
               -o out/script.html
 
-      - name: Upload PDF
-        uses: actions/upload-artifact@v4
+      - name: Delete existing release (if it exists)
+        uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
-          name: script.pdf
-          path: out/script.pdf
+          tag_name: latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
-      - name: Upload HTML
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: html.pdf
-          path: out/html.pdf
+          tag_name: latest
+          name: "Latest Release"
+          files: |
+            out/script.pdf
+            out/script.html
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
