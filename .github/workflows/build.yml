@@ -6,6 +6,11 @@ jobs:
   convert_via_pandoc:
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Create output directory
+        run: mkdir -p out
+
       - uses: docker://pandoc/core:3.5
         with:
           args: >-  # allows you to break string into multiple lines
@@ -21,6 +26,7 @@ jobs:
             --metadata date="$(date +"%Y-%m-%d %H:%M")"
             -s
             -o out/script.pdf 
+
       - uses: docker://pandoc/core:3.5
         with:
           args: >-  # allows you to break string into multiple lines
@@ -36,3 +42,9 @@ jobs:
             --metadata date="$(date +"%Y-%m-%d %H:%M")"
             -s
             -o out/script.html
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: documents
+          path: out/
