@@ -21,7 +21,9 @@ jobs:
       - name: Current date
         id: date
         run: echo "date=$(date +"%Y-%m-%d %H:%M")" >> $GITHUB_OUTPUT
-      
+
+      - name: Install Fonts
+        run: sudo apt -y install fonts-roboto
 
       - uses: docker://pandoc/latex
         with:
