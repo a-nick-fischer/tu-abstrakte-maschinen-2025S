@@ -24,51 +24,39 @@ jobs:
 
       - name: Install Fonts
         run: |
-          sudo apt -y install fonts-noto fonts-roboto
+          sudo apt install -y fonts-noto fonts-roboto
+          sudo apt install -y pandoc texlive-xetex fonts-noto
 
-          # Create font directory and mount point
-          mkdir -p /tmp/fonts
-          mkdir -p ~/.fonts
-          
-          # Update font cache
-          fc-cache -fv ~/.fonts
-          fc-cache -fv /tmp/fonts
+      - name: Convert Markdown to PDF
+        run: |
+          pandoc \
+              -i *.md \
+              -f gfm \
+              --pdf-engine=xelatex \
+              -V mainfont="Roboto" \
+              -V monofont="Fira Code" \
+              -V geometry:a4paper \
+              -V geometry:margin=2cm \
+              --toc=true \
+              --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
+              --metadata date="$(date +"%Y-%m-%d %H:%M")" \
+              -s \
+              -o out/script.pdf 
 
-      - uses: docker://pandoc/latex
-        with:
-          args: >-  # allows you to break string into multiple lines
-            -i ${{ steps.files_list.outputs.files }}
-            -f gfm
-            --pdf-engine=xelatex
-            -V mainfont="Roboto"
-            -V monofont="Fira Code"
-            -V geometry:a4paper
-            -V geometry:margin=2cm
-            --toc=true
-            --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date="${{ steps.date.outputs.date }}"
-            -s
-            -o out/script.pdf 
-        env:
-          HOME: /tmp
-
-      - uses: docker://pandoc/latex
-        with:
-          args: >-  # allows you to break string into multiple lines
-            -i ${{ steps.files_list.outputs.files }}
-            -f gfm
-            --pdf-engine=xelatex
-            -V mainfont="Roboto"
-            -V monofont="Fira Code"
-            -V geometry:a4paper
-            -V geometry:margin=2cm
-            --toc=true
-            --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date="${{ steps.date.outputs.date }}"
-            -s
-            -o out/script.html
-        env:
-          HOME: /tmp
+          # HTMl
+          pandoc \
+              -i *.md \
+              -f gfm \
+              --pdf-engine=xelatex \
+              -V mainfont="Roboto" \
+              -V monofont="Fira Code" \
+              -V geometry:a4paper \
+              -V geometry:margin=2cm \
+              --toc=true \
+              --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
+              --metadata date="$(date +"%Y-%m-%d %H:%M")" \
+              -s \
+              -o out/script.html
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
