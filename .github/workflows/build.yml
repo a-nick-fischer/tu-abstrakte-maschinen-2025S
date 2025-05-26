@@ -68,7 +68,7 @@ jobs:
 
       - name: Delete existing release (if it exists)
         run: |
-          gh release delete latest -y --cleanup-tag
+          gh release delete latest -y --cleanup-tag || true
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
