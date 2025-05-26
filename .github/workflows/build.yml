@@ -15,7 +15,10 @@ jobs:
       
       - name: Setup pandoc
         uses: setup-pandoc/action@v2
-        
+        id: pandoc
+        with:
+          texlive_version: '202103'
+      
       - name: Install fonts
         run: |
           sudo apt-get update
