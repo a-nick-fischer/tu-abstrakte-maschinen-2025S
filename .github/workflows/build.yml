@@ -13,13 +13,10 @@ jobs:
       - name: Create output directory
         run: mkdir -p out
 
-      - name: bla
-        run: ls
-
       - uses: docker://pandoc/core:3.5
         with:
           args: >-  # allows you to break string into multiple lines
-            -i *.md
+            -i main/*.md
             -f gfm
             --pdf-engine=xelatex
             -V mainfont="Roboto"
@@ -35,7 +32,7 @@ jobs:
       - uses: docker://pandoc/core:3.5
         with:
           args: >-  # allows you to break string into multiple lines
-            -i *.md
+            -i main/*.md
             -f gfm
             --pdf-engine=xelatex
             -V mainfont="Roboto"
