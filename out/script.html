@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Abstrakte Maschinen Ausarbeitung - 2025S</title>
+  <style>
+    html {
+      font-family: Roboto;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Fira Code;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Abstrakte Maschinen Ausarbeitung - 2025S</h1>
+<p class="date">2025-05-26 22:07</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul class="incremental">
+<li><a href="#aufbau-von-interpretern"
+id="toc-aufbau-von-interpretern">Aufbau von Interpretern</a></li>
+<li><a href="#zwischencodes---intermediate-language-il"
+id="toc-zwischencodes---intermediate-language-il">Zwischencodes -
+Intermediate Language (IL)</a></li>
+<li><a href="#prozessorarchitekturen"
+id="toc-prozessorarchitekturen">Prozessorarchitekturen</a>
+<ul class="incremental">
+<li><a href="#isa" id="toc-isa">ISA</a>
+<ul class="incremental">
+<li><a href="#cisc-risc-misc-oisc-" id="toc-cisc-risc-misc-oisc-">CISC,
+RISC, MISC, OISC, ...</a></li>
+</ul></li>
+<li><a href="#microarchitecture"
+id="toc-microarchitecture">Microarchitecture</a>
+<ul class="incremental">
+<li><a href="#moderne-implementierungs-techniken"
+id="toc-moderne-implementierungs-techniken">(Moderne)
+Implementierungs-Techniken</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#threaded-code" id="toc-threaded-code">Threaded
+Code</a></li>
+<li><a href="#forth" id="toc-forth">Forth</a></li>
+<li><a href="#pascal-p4" id="toc-pascal-p4">Pascal P4</a></li>
+<li><a href="#jvm" id="toc-jvm">JVM</a></li>
+<li><a href="#microsoft-il" id="toc-microsoft-il">Microsoft IL</a></li>
+<li><a href="#registermaschinen"
+id="toc-registermaschinen">Registermaschinen</a></li>
+<li><a href="#dalvikvm" id="toc-dalvikvm">DalvikVM</a></li>
+<li><a href="#syntaxgesteuerte-editoren"
+id="toc-syntaxgesteuerte-editoren">Syntaxgesteuerte Editoren</a></li>
+<li><a href="#baummaschinen"
+id="toc-baummaschinen">Baummaschinen</a></li>
+<li><a href="#prologmaschinen"
+id="toc-prologmaschinen">Prologmaschinen</a></li>
+<li><a href="#funktionale-sprachen"
+id="toc-funktionale-sprachen">Funktionale Sprachen</a></li>
+</ul>
+</nav>
+<h1 id="aufbau-von-interpretern">Aufbau von Interpretern</h1>
+<p>Aus dem Compilerbau-Skriptum:</p>
+<blockquote>
+<p>Ein <strong>Interpreter</strong> ist ein Programm, das Programme
+ausführen kann, die in seiner <strong>Interpretersprache</strong> I
+formuliert sind. Ein Interpreter verhält sich wie eine Maschine bzw. ein
+Prozessor. Man bezeichnet ihn daher auch als <strong>virtuelle</strong>
+oder <strong>abstrakte Maschine</strong>.</p>
+</blockquote>
+<h1 id="zwischencodes---intermediate-language-il">Zwischencodes -
+Intermediate Language (IL)</h1>
+<p>Compiler und Interpreter laufen durch verschieden Phasen ("passes")
+(lexing, parsing, scope analysis, ...) - dabei wird üblicherweise der
+Code in verschiedene Datenstrukturen zum weiteren Verwenden gepackt
+(e.g. AST - abstract syntax <strong>tree</strong>). Da die semantic des
+ursprünglichen Codes (ein kontinuierlicher String) nicht verloren geht,
+kann man die neue Struktur als IL bezeichnen.</p>
+<p>Meist bezeichnet man aber erst die letzteren Datenstrukturen als IL:
+Java Byte-Code, Microsoft IL, etc. Sprich: Von einer IL spricht man im
+Regelfall erst, sobald ein AST <em>linearisiert</em> wurde.</p>
+<h1 id="prozessorarchitekturen">Prozessorarchitekturen</h1>
+<p>Ein Prozessor "besteht" aus 2 verschiedenen Arten von Architekturen:
+<strong>Befehlsarchitektur - instruction set architecture (ISA)</strong>
+und die <strong>Mikroarchitektur - microarchitecure</strong></p>
+<h2 id="isa">ISA</h2>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://en.wikipedia.org/wiki/Instruction_set_architecture">ISA -
+Wikipedia</a></li>
+</ul>
+<hr />
+<p>Was die ISA macht steckt bereits im Namen: <strong>instruction
+set</strong> architecture. Hier wird also definiert, welche
+Instruktionen eine CPU versteht (im weiteren Sinne braucht die CPU dafür
+dann auch natürlich entsprechende Register, memory access, etc.), für
+RISC-V gibt es hier z. B. <code>addi ...</code> <code>li ...</code>
+<code>ret</code> (Das ist natürlich nur assembly-code, was die ISA
+"nichts" angeht, die ISA definiert hier wirklich nur die Befehle in
+bits)</p>
+<p>Eine <strong>RISC-V</strong> CPU ist also jede beliebige CPU, welche
+die RISC-V ISA laut Spezifikation entsprechend implementiert. Das
+erklärt dann im weiteren auch leicht den Unterschied zwischen ISA und
+Microarchitecture.</p>
+<h3 id="cisc-risc-misc-oisc-">CISC, RISC, MISC, OISC, ...</h3>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://en.wikipedia.org/wiki/Complex_instruction_set_computer">CISC
+- Wikipedia</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/Reduced_instruction_set_computer">RISC
+- Wikipedia</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/Minimal_instruction_set_computer">MISC
+- Wikipedia</a></li>
+<li><a
+href="https://en.wikipedia.org/wiki/One-instruction_set_computer">OISC -
+Wikipedia</a></li>
+</ul>
+<hr />
+<p>Es gibt in Bezug zur ISA hier verschiedene ISA-"Gruppen" ("Design
+Philosophien"), z. B.:</p>
+<ul class="incremental">
+<li>CISC: Complex instruction set computer
+<ul class="incremental">
+<li>variable Befehlslänge, komplexe Adressierungsarten, komplexe
+Befehle</li>
+<li>Ein Befehl kann viele kleine Operationen ausführen (e.g. String
+compare)</li>
+<li>Beispiele:
+<ul class="incremental">
+<li>VAX</li>
+<li>68K</li>
+<li>x86</li>
+</ul></li>
+</ul></li>
+<li>RISC: Reduced instruction set computer
+<ul class="incremental">
+<li>fixe Befehlslänge, wenig Adressierungsarten, ein Speicherzugriff pro
+Befehl, einfache Befehle, viele Register</li>
+<li>Ein Befehl führt einen kleinen Task aus (zb <em>nicht</em> zwei
+loads in einem Befehl)</li>
+<li>Sagt nichts über die <strong>Anzahl</strong> der Befehle aus, RISCV
+hat trotzdem viele verschiedene Befehle</li>
+<li>Beispiele:
+<ul class="incremental">
+<li>MIPS</li>
+<li>Precision Architecture</li>
+<li>Sparc</li>
+<li>ARM</li>
+<li>PowerPC</li>
+<li>Alpha</li>
+</ul></li>
+</ul></li>
+<li>MISC: Minimal instruction set computer
+<ul class="incremental">
+<li>Nur sehr wenige Befehle, meist für Mikroprozessoren</li>
+<li>Sind oft als Stack-Maschinen implementiert, dadurch können die
+Befehle deutlich simpler und kürzer gestaltet werden, da Operanden
+einfach vom Stack gelesen werden.</li>
+</ul></li>
+<li>OISC: One instruction set computer
+<ul class="incremental">
+<li>Auch bekannt als <em><strong>ULTIMATE REDUCED INSTRUCTION SET
+COMPUTER</strong></em></li>
+<li>Nur eine einizige instruction (ja, nur eine)</li>
+<li>Die fixe Befehlslänge ist damit natürlich trivial (daher auch
+U-RISC)</li>
+<li>Siehe <a
+href="https://en.wikipedia.org/wiki/One-instruction_set_computer#Instruction_types">Instruction-Types</a>
+für Beispiele von solchen instructions</li>
+</ul></li>
+</ul>
+<h2 id="microarchitecture">Microarchitecture</h2>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://en.wikipedia.org/wiki/Microarchitecture">Microarchitecture
+- Wikipedia</a></li>
+</ul>
+<hr />
+<p>(Hat nichts mit Mikroprozessoren zu tun)</p>
+<p>Die Microarchitecture ist jetzt die <strong>konkrete</strong>
+Implementation einer ISA in einer CPU. Wie bereits gesagt, können
+mehrere verschiedene CPUs dieselbe ISA implementieren - es gibt viele
+RISC-V CPUs, diese sind aber natürlich nicht alle ident: Der Unterschied
+zwischen denen ist hierbei die unterschiedliche Microarchitecture.</p>
+<p>Ein simples Beispiel für einen Unterschied in der Microarchitektur:
+Es gibt verschiedene implementationen für einen n-bit-Volladdierer (zb
+Ripple-Carry-Adder und Carry-lookahead-Adder). Da sich diese nur in der
+Performance (und Preis...) Unterscheiden, kann man diese beliebig
+austauschen. Die ISA bleibt also weiterhin gleich, aber die
+Microarchitektur hat sich geändert!</p>
+<h3 id="moderne-implementierungs-techniken">(Moderne)
+Implementierungs-Techniken</h3>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://en.wikipedia.org/wiki/Microarchitecture#Microarchitectural_concepts">Microarchitecture#Microarchitectural_concepts
+- Wikipedia</a></li>
+</ul>
+<h4 id="pipelining">Pipelining</h4>
+<p>Wenn ein Befehl ausgeführt wird (zb <code>addi x5, 3</code>) werden
+viele Komponenten angesprochen. Ein Befehl muss zuerst geladen werden,
+dann decodiert, dann wird irgendwann die ALU angesprochen und irgendwann
+wird das Ergebnis irgendwo abgespeichert.</p>
+<p>Pipelining nutzt dieses Verhalten aus: Während eine Berechnung gerade
+in der ALU (also nachdem der Befehl schon gefetched und decodiert wurde)
+stattfindet, kann der nächste Befehl bereits ausgeführt werden.</p>
+<p>Oft nimmt man hier anfänglich zum Lernen des Konzepts diese
+Pipeline-Stages:</p>
+<ul class="incremental">
+<li>Fetch: nächsten Befehl laden</li>
+<li>Decode: den Befehl decodieren</li>
+<li>Execute: den Befehl ausführen (meist über eine Berechnung in der
+ALU)</li>
+<li>Write back: Ergebnis returnen (entweder in ein Register oder
+Memory)</li>
+</ul>
+<p>Pipelining hängt meist stark mit den anderen Techniken zusammen (zb
+result forwarding).</p>
+<h4 id="superscalar">Superscalar</h4>
+<p>Pipelining erlaubt es, mehrere (potentiell voneinander abhängige)
+Instructions "verzahnt" auszuführen. Superscalar beschreibt hierbei ein
+<strong>gleichzeitiges</strong> Ausführen von Instructions (also z.B.
+zwei Instructions auf einmal fetchen). Dafür benötigt man zum einen
+natürlich entsprechend mehr Hardware, zum anderen aber auch ein handeln
+von dependencies zwischen diesen instructions.</p>
+<h4 id="cache-decoded-instruction-cache">Cache (decoded instruction
+cache)</h4>
+<p>Kleine caches auf der CPU für schnelleren Zugriff als auf main RAM,
+heutzutage meist ~2MB groß.</p>
+<h4 id="result-forwarding-bypass">Result forwarding (bypass)</h4>
+<p>References:</p>
+<ul class="incremental">
+<li><a href="https://en.wikipedia.org/wiki/Operand_forwarding">Operand
+forwarding - Wikipedia</a></li>
+</ul>
+<hr />
+<p>Theoretisch ist ein Ergebnis erst nach der <code>Write back</code>
+stage verfügbar. Allerdings "kennt" man das Ergebnis ja schon bereits
+nach der <code>Execute</code> stage, wo es in der ALU ausgerechnet
+wurde.</p>
+<p>Damit eine instruction also nicht eine stage länger warten muss, kann
+(simplified) ein extra Wire in der CPU "platziert" werden, dass direkt
+vom output der ALU in den Input der ALU für die nächste Instruktion
+führt.</p>
+<p>Result forwarding bezieht sich aber nicht nur auf die ALU / auf die
+Execute Stage, das ist implementationsabhängig.</p>
+<h4 id="register-renaming">Register renaming</h4>
+<p>References:</p>
+<ul class="incremental">
+<li><a href="https://en.wikipedia.org/wiki/Register_renaming">Register
+renaming - Wikipedia</a></li>
+</ul>
+<hr />
+<p>Register können umbenannt werden um gewisse dependencies zwischen
+Instruktionen aufzulösen, was die Parallälität erhöht.</p>
+<h4 id="branch-prediction">Branch prediction</h4>
+<p>Beim Pipelining ging es darum, den nächsten Befehl so früh es geht zu
+starten während der vorherige noch abgearbeitet wird. Ist der vorherige
+jetzt allerdings ein (conditional-)jump Befehl, stellt sich die Frage,
+welchen Befehl man nun fetchen soll.</p>
+<p>Dafür gibt es branch prediction (mit verschiedenen, immer komplexer
+werdenden Implementationen), welche anhand von dem vergangenen Verhalten
+des Programms versuchen zu vorhersagen, welcher branch genommen
+wird.</p>
+<p>Falls richtig geraten wurde, hat man einen performance benefit, falls
+falsch eben einen performance hit (falsche instruction muss geflushed
+werden und andere gestartet).</p>
+<h4 id="reservation-stations-history-buffers-future-files">Reservation
+stations, history buffers, future files</h4>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://en.wikipedia.org/wiki/Reservation_station">Reservation
+Station - Wikipedia</a></li>
+</ul>
+<hr />
+<ul class="incremental">
+<li><p>Reservation Station: Kümmert sich um das handeln von dependencies
+zwischen operands und checkt ob eine Komponente frei ist. Dadurch kann
+"buffered" gefetched und decoded werden und erst verzögert dann die
+execute stage ausgeführt werden. (? - bin mir hier etwas
+unsicher)</p></li>
+<li><p>(TODO) History buffers: nichts dazu gefunden</p></li>
+<li><p>(TODO) Future files: nichts dazu gefunden</p></li>
+</ul>
+<h1 id="threaded-code">Threaded Code</h1>
+<p>TODO</p>
+<h1 id="forth">Forth</h1>
+<p>TODO</p>
+<h1 id="pascal-p4">Pascal P4</h1>
+<p>TODO</p>
+<h1 id="jvm">JVM</h1>
+<p>TODO</p>
+<h1 id="microsoft-il">Microsoft IL</h1>
+<p>TODO</p>
+<h1 id="registermaschinen">Registermaschinen</h1>
+<p>TODO</p>
+<h1 id="dalvikvm">DalvikVM</h1>
+<p>TODO</p>
+<h1 id="syntaxgesteuerte-editoren">Syntaxgesteuerte Editoren</h1>
+<p>TODO</p>
+<h1 id="baummaschinen">Baummaschinen</h1>
+<p>TODO</p>
+<h1 id="prologmaschinen">Prologmaschinen</h1>
+<p>TODO</p>
+<h1 id="funktionale-sprachen">Funktionale Sprachen</h1>
+<p>TODO</p>
+</body>
+</html>
