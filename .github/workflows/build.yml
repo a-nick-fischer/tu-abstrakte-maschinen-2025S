@@ -13,13 +13,15 @@ jobs:
       - name: Create output directory
         run: mkdir -p out
 
-      - name: bla
-        run: ls main/
+      - name: Make files accessible to pandoc
+        id: files_list
+        run: |
+          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
 
       - uses: docker://pandoc/latex
         with:
           args: >-  # allows you to break string into multiple lines
-            -i main/*.md
+            -i ${{ steps.files_list.outputs.files }}
             -f gfm
             --pdf-engine=xelatex
             -V mainfont="Roboto"
@@ -35,7 +37,7 @@ jobs:
       - uses: docker://pandoc/latex
         with:
           args: >-  # allows you to break string into multiple lines
-            -i main/*.md
+            -i ${{ steps.files_list.outputs.files }}
             -f gfm
             --pdf-engine=xelatex
             -V mainfont="Roboto"
