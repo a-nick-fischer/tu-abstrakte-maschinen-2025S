@@ -24,7 +24,7 @@ jobs:
 
       - name: Install Fonts
         run: |
-          sudo apt -y install fonts-noto
+          sudo apt -y install fonts-noto fonts-roboto
 
           # Create font directory and mount point
           mkdir -p /tmp/fonts
