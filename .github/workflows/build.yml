@@ -23,7 +23,16 @@ jobs:
         run: echo "date=$(date +"%Y-%m-%d %H:%M")" >> $GITHUB_OUTPUT
 
       - name: Install Fonts
-        run: sudo apt -y install fonts-roboto
+        run: |
+          sudo apt -y install fonts-noto
+
+          # Create font directory and mount point
+          mkdir -p /tmp/fonts
+          mkdir -p ~/.fonts
+          
+          # Update font cache
+          fc-cache -fv ~/.fonts
+          fc-cache -fv /tmp/fonts
 
       - uses: docker://pandoc/latex
         with:
@@ -40,6 +49,8 @@ jobs:
             --metadata date="${{ steps.date.outputs.date }}"
             -s
             -o out/script.pdf 
+        env:
+          /tmp
 
       - uses: docker://pandoc/latex
         with:
@@ -56,6 +67,8 @@ jobs:
             --metadata date="${{ steps.date.outputs.date }}"
             -s
             -o out/script.html
+        env:
+          /tmp
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
