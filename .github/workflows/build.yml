@@ -16,7 +16,8 @@ jobs:
       - name: Make files accessible to pandoc
         id: files_list
         run: |
-          echo "files=$(printf '"%s" ' *.md)" > $GITHUB_OUTPUT
+          echo "files=$(printf '"%s" ' main/*.md)"
+          echo "files=$(printf '"%s" ' main/*.md)" > $GITHUB_OUTPUT
 
       - uses: docker://pandoc/latex
         with:
