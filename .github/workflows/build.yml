@@ -35,7 +35,7 @@ jobs:
             -V geometry:margin=2cm
             --toc=true
             --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date=${{ steps.date.outputs.date }}
+            --metadata date="${{ steps.date.outputs.date }}"
             -s
             -o out/script.pdf 
 
@@ -51,7 +51,7 @@ jobs:
             -V geometry:margin=2cm
             --toc=true
             --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S"
-            --metadata date=${{ steps.date.outputs.date }}
+            --metadata date="${{ steps.date.outputs.date }}"
             -s
             -o out/script.html
 
