@@ -130,7 +130,10 @@ References:
 
 ---
 
-- Reservation Station: Kümmert sich um das handeln von dependencies zwischen operands und checkt ob eine Komponente frei ist. Dadurch kann "buffered" gefetched und decoded werden und erst verzögert dann die execute stage ausgeführt werden. (? - bin mir hier etwas unsicher)
+- Reservation Station: Kümmert sich um das handeln von dependencies zwischen operands und checkt ob eine Komponente frei ist. Dadurch kann "buffered" gefetched und decoded werden und erst verzögert dann die execute stage ausgeführt werden. Das bedeutet dass das fetchen nicht stallen muss wenn eine Komponente gerade blockiert ist sondern so lange weiter fetchen kann bis die Reservation Station voll ist.
+- Das ermöglicht eine gleichmäßigere Auslastung der Komponenten.
 
-- (TODO) History buffers: nichts dazu gefunden
-- (TODO) Future files: nichts dazu gefunden
+- (TODO) History buffers: Speichert die Werte des Zielregisters von Instruktionen vor der ausführung und löscht diese falls die Instruktion die älterste ist und kein interrupt/trap aufgetreten ist.
+- [History buffer - Random Slides von einer Uni](https://course.ece.cmu.edu/~ece447/s15/lib/exe/fetch.php?media=onur-447-spring15-lecture11-precise-exceptions-afterlecture.ppt).
+- (TODO) Future files: Ist ein seperates Register File welches mit Werten von ausgeführten Instruktionen befüllt wird. Das vermeidet dass neue Instruktionen Werte aus dem Reorder Buffer lesen müssen, sondern gleich die spekulativen Werte lesen können. Wenn eine exception auftritt muss das architekturelle (reale) Register file auf das Future file übertragen werden.
+- [Future files - Random Slides von einer Uni](https://course.ece.cmu.edu/~ece447/s15/lib/exe/fetch.php?media=onur-447-spring15-lecture11-precise-exceptions-afterlecture.ppt).
