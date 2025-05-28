@@ -39,7 +39,7 @@ jobs:
               --toc \
               --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
               --metadata date="$(date +"%Y-%m-%d %H:%M")" \
-              --embed-resources --standalone \
+              --self-contained --standalone \
               -o out/script.pdf 
 
           # HTMl
@@ -54,7 +54,7 @@ jobs:
               --toc \
               --metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
               --metadata date="$(date +"%Y-%m-%d %H:%M")" \
-              --embed-resources --standalone \
+              --self-contained --standalone \
               -o out/script.html
 
       - name: Delete existing release (if it exists)
