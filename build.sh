@@ -13,7 +13,7 @@ pandoc \
 	--toc=true \
 	--metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
 	--metadata date="$(date +"%Y-%m-%d %H:%M")" \
-	-s \
+	--embed-resources --standalone \
     -o out/script.pdf 
 
 # HTMl
@@ -28,5 +28,5 @@ pandoc \
 	--toc=true \
 	--metadata title="Abstrakte Maschinen Ausarbeitung - 2025S" \
 	--metadata date="$(date +"%Y-%m-%d %H:%M")" \
-	-s \
+	--embed-resources --standalone \
     -o out/script.html
