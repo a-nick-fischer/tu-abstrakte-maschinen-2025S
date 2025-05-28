@@ -167,12 +167,77 @@
       vertical-align: middle;
     }
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
   </style>
 </head>
 <body>
 <header id="title-block-header">
 <h1 class="title">Abstrakte Maschinen Ausarbeitung - 2025S</h1>
-<p class="date">2025-05-26 22:19</p>
+<p class="date">2025-05-29 01:22</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul class="incremental">
@@ -197,8 +262,26 @@ id="toc-moderne-implementierungs-techniken">(Moderne)
 Implementierungs-Techniken</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#threaded-code" id="toc-threaded-code">Threaded
-Code</a></li>
+<li><a href="#threaded-code" id="toc-threaded-code">Threaded Code</a>
+<ul class="incremental">
+<li><a href="#threaded-code-arten" id="toc-threaded-code-arten">Threaded
+Code Arten</a>
+<ul class="incremental">
+<li><a href="#subroutine-threaded-code"
+id="toc-subroutine-threaded-code">subroutine threaded code</a></li>
+<li><a href="#direct-threaded-code" id="toc-direct-threaded-code">direct
+threaded code</a></li>
+<li><a href="#indirect-threaded-code"
+id="toc-indirect-threaded-code">indirect threaded code</a></li>
+<li><a href="#token-threaded-code" id="toc-token-threaded-code">token
+threaded code</a></li>
+<li><a href="#indirect-token-threaded-code"
+id="toc-indirect-token-threaded-code">indirect token threaded
+code</a></li>
+</ul></li>
+<li><a href="#threaded-code-vergleich"
+id="toc-threaded-code-vergleich">Threaded Code Vergleich</a></li>
+</ul></li>
 <li><a href="#forth" id="toc-forth">Forth</a></li>
 <li><a href="#pascal-p4" id="toc-pascal-p4">Pascal P4</a></li>
 <li><a href="#jvm" id="toc-jvm">JVM</a></li>
@@ -237,9 +320,14 @@ kann man die neue Struktur als IL bezeichnen.</p>
 Java Byte-Code, Microsoft IL, etc. Sprich: Von einer IL spricht man im
 Regelfall erst, sobald ein AST <em>linearisiert</em> wurde.</p>
 <h1 id="prozessorarchitekturen">Prozessorarchitekturen</h1>
-<p>Ein Prozessor "besteht" aus 2 verschiedenen Arten von Architekturen:
-<strong>Befehlsarchitektur - instruction set architecture (ISA)</strong>
-und die <strong>Mikroarchitektur - microarchitecure</strong></p>
+<p>Ein Prozessor "besteht" aus 2 verschiedenen Arten von
+Architekturen:</p>
+<ul class="incremental">
+<li><strong>Befehlsarchitektur - instruction set architecture
+(ISA)</strong></li>
+<li>und die <strong>Mikroarchitektur - microarchitecure
+(MiA)</strong></li>
+</ul>
 <h2 id="isa">ISA</h2>
 <p>References:</p>
 <ul class="incremental">
@@ -434,19 +522,293 @@ stations, history buffers, future files</h4>
 <li><a
 href="https://en.wikipedia.org/wiki/Reservation_station">Reservation
 Station - Wikipedia</a></li>
+<li><a
+href="https://course.ece.cmu.edu/~ece447/s15/lib/exe/fetch.php?media=onur-447-spring15-lecture11-precise-exceptions-afterlecture.ppt">History
+buffer - Random Slides von einer Uni</a></li>
+<li><a
+href="https://course.ece.cmu.edu/~ece447/s15/lib/exe/fetch.php?media=onur-447-spring15-lecture11-precise-exceptions-afterlecture.ppt">Future
+files - Random Slides von einer Uni</a></li>
 </ul>
 <hr />
 <ul class="incremental">
 <li><p>Reservation Station: Kümmert sich um das handeln von dependencies
 zwischen operands und checkt ob eine Komponente frei ist. Dadurch kann
 "buffered" gefetched und decoded werden und erst verzögert dann die
-execute stage ausgeführt werden. (? - bin mir hier etwas
-unsicher)</p></li>
-<li><p>(TODO) History buffers: nichts dazu gefunden</p></li>
-<li><p>(TODO) Future files: nichts dazu gefunden</p></li>
+execute stage ausgeführt werden. Das bedeutet dass das fetchen nicht
+stallen muss wenn eine Komponente gerade blockiert ist sondern so lange
+weiter fetchen kann bis die Reservation Station voll ist.</p></li>
+<li><p>Das ermöglicht eine gleichmäßigere Auslastung der
+Komponenten.</p></li>
+<li><p>History buffers: Speichert die Werte des Zielregisters von
+Instruktionen vor der ausführung und löscht diese falls die Instruktion
+die älterste ist und kein interrupt/trap aufgetreten ist.</p></li>
+<li><p>Future files: Ist ein seperates Register File welches mit Werten
+von ausgeführten Instruktionen befüllt wird. Das vermeidet dass neue
+Instruktionen Werte aus dem Reorder Buffer lesen müssen, sondern gleich
+die spekulativen Werte lesen können. Wenn eine exception auftritt muss
+das architekturelle (reale) Register file auf das Future file übertragen
+werden.</p></li>
 </ul>
 <h1 id="threaded-code">Threaded Code</h1>
-<p>TODO</p>
+<p>References:</p>
+<ul class="incremental">
+<li><a
+href="https://www.complang.tuwien.ac.at/andi/papers/ThreadedCode.pdf">ThreadedCode
+- Skriptum Slides</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Threaded_code">Threaded Code
+- Wikipedia</a></li>
+</ul>
+<hr />
+<p>Aus dem Skriptum:</p>
+<blockquote>
+<p>Die interne Darstellung eines threaded Interpreters ist eine Liste
+von Adressen vorher definierter interner Darstellungen
+(Unterprogrammen). Diese Darstellungen sind in einer linearen Liste
+aufgefädelt. Die einzelnen Elemente werden übersetzt. Die abstrakte
+Maschine ist meistens eine Stack-maschine.</p>
+</blockquote>
+<p><img src="assets/004-threaded-code-1.png" alt="Threaded-Code" /></p>
+<p>Mit anderen Worten: Threaded Code besteht im Grunde aus zwei
+verschiedenen "Code"-Stücken:</p>
+<ul class="incremental">
+<li>Zwischencode</li>
+<li>Maschinencode</li>
+</ul>
+<p>Der Maschinencode ist der "tatsächliche" Code der ausgeführt wird.
+Das muss natürlich nicht klassisches (Dis-)assembly sein, sondern ein
+beliebiger Code der von einer gegebenen (abstrakten) Maschine ausgeführt
+werden kann.</p>
+<p>Zwischencode ist lediglich für das managen des Maschinencodes
+zuständig. Auf Assembly-Ebene würde man hier zb eine Aneinanderreihung
+von jump instructions finden. Man kann sich das aber auch wie eine
+Main-Function vorstellen, die nacheinander function-calls macht.</p>
+<p>Betrachtet man das Bild vom Skriptum, dann wären die ersten 3
+Tabellen (mit <code>Code</code> geschrieben) die Maschinencode-Blöcke,
+und die 4te Tabelle enthält den Zwischencode-Block mit den Pointern zu
+den Maschinencode-Blöcken. Das wichtige Detail ist hier eben, dass die
+Maschinencode-Blöcke nichts voneinander wissen, sondern nur einen
+Pointer (<code>instruction counter</code> /
+<code>instruction pointer</code>) zurück auf den Zwischencode haben
+(genauer dann bei <a href="#threaded-code-arten">Threaded Code Arten</a>
+beschrieben).</p>
+<p>Es gibt jetzt aber mehrere Möglichkeiten, wie der Zwischencode und
+die "return logic" vom Maschinencode implementiert ist. Als simples
+Beispiel könnte der Zwischencode entweder wirklich eins nach dem anderen
+eine Funktion aufrufen, oder es gibt eine globale Liste mit einem
+index-counter welcher direkt nach jedem Function-Call sofort erhöht wird
+und somit kann die "return logic" vom Maschinen-Code selbst gleich den
+nächsten Maschinen-Code Block aufrufen.</p>
+<p>Die Unterschiede hier geben dann je nach ISA und Microarch dann
+unterschiedlich gute performance.</p>
+<p>Konkret unterscheiden wir zwischen diesen threaded code Arten:</p>
+<ul class="incremental">
+<li>subroutine threaded code</li>
+<li>direct threaded code</li>
+<li>indirect threaded code</li>
+<li>token threaded code</li>
+<li>indirect token threaded code</li>
+</ul>
+<h2 id="threaded-code-arten">Threaded Code Arten</h2>
+<h3 id="subroutine-threaded-code">subroutine threaded code</h3>
+<p>Die (meiner Meinung nach) einfachste Art von threaded code. Im Grunde
+genau die konkrete Abfolge von Function-Calls in einer
+main-function.</p>
+<p>Auf Assembly-Ebene sieht das dann z. B. so aus:</p>
+<p><img src="assets/004-threaded-code-2.png" alt="Threaded-Code" /></p>
+<p>Wie man sieht enthält der Zwischencode also wirklich subroutine
+calls, und der Maschinencode macht am Ende einfach ein return, wodurch
+der Zwischencode automatisch den nächsten subroutine call dann
+macht.</p>
+<h3 id="direct-threaded-code">direct threaded code</h3>
+<p><img src="assets/004-threaded-code-3.png" alt="Threaded-Code" /></p>
+<p>Beim direct threaded code springt man nicht mehr die ganze Zeit
+zwischen Maschinencode und Zwischencode hin und her. Der Zwischencode
+ist zwar noch immer der main entrypoint, aber enhält jetzt nur noch mehr
+eine Liste von Adressen / Pointern zu den einzelnen
+Maschinencode-Blöcken (also <em>keine</em> call instructions mehr).</p>
+<p>Stattdessen wird jetzt am Anfang nur ein instruction-counter (ic)
+initialisiert (i.e. ein pointer zu der Address-Liste), welcher einfach
+am Anfang der Address-Liste beginnt. Nachdem der erste (oder ein
+beliebiger) Maschinencode-Block fertig ausgeführt wurde, steht am Ende
+von diesem ein <code>jmp next</code>. Schaut man sich im Bild den
+Pseudo-Assembly-Code an sieht man, dass hier einfach der <code>ic</code>
+incremented und dann auf die Addresse der nächsten instruction
+<code>instr</code> gesprungen wird <code>jmp (instr)</code>.</p>
+<p>Das <code>push ic</code> und <code>pop ic</code> ist die exit-logic
+vom gesamten "Programm".</p>
+<p>Hier auch ein Code-Beispiel von Wikipedia:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define PUSH</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">(*</span><span class="pp">sp</span><span class="op">++</span><span class="pp"> </span><span class="op">=</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">))</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define POP</span><span class="op">()</span><span class="pp"> </span><span class="op">(*--</span><span class="pp">sp</span><span class="op">)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>start<span class="op">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  ip <span class="op">=</span> <span class="op">&amp;</span>thread  <span class="co">// ip points to &amp;pushA (which points to the first instruction of pushA)</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*</span>ip<span class="op">++</span>  <span class="co">// send control to first instruction of pushA and advance ip to &amp;pushB</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>thread<span class="op">:</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>pushA</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>pushB</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>add</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>pushA<span class="op">:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  PUSH<span class="op">(</span>A<span class="op">)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*</span>ip<span class="op">++</span> <span class="co">// send control where ip says to (i.e. to pushB) and advance ip</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pushB<span class="op">:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  PUSH<span class="op">(</span>B<span class="op">)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*</span>ip<span class="op">++</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>add<span class="op">:</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  result <span class="op">=</span> POP<span class="op">()</span> <span class="op">+</span> POP<span class="op">()</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  PUSH<span class="op">(</span>result<span class="op">)</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*</span>ip<span class="op">++</span></span></code></pre></div>
+<h3 id="indirect-threaded-code">indirect threaded code</h3>
+<p>Der Unterschied zwischen <code>direct</code> und
+<code>indirect</code> (unten dann auch bei <code>token</code>) threaded
+code ist, dass es eine weitere <em>Indirektion</em>, also ein extra
+Pointer gibt. Am besten vergleicht man den direct threaded code von oben
+mit den folgenden äquivalenten indirect threaded code:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>start<span class="op">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  ip <span class="op">=</span> <span class="op">&amp;</span>thread  <span class="co">// points to &#39;&amp;i_pushA&#39;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*(*</span>ip<span class="op">)</span>  <span class="co">// follow pointers to 1st instruction of &#39;push&#39;, DO NOT advance ip yet</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>thread<span class="op">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>i_pushA</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>i_pushB</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>i_add</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>i_pushA<span class="op">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>push</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>A</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>i_pushB<span class="op">:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>push</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>B</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>i_add<span class="op">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>add</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>push<span class="op">:</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// look 1 past start of indirect block for operand address</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> <span class="op">*(*</span>ip <span class="op">+</span> <span class="dv">1</span><span class="op">)</span>  </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">// advance ip in thread, jump through next indirect block to next subroutine</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*(*++</span>ip<span class="op">)</span>  </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>add<span class="op">:</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  addend1 <span class="op">=</span> <span class="op">*--</span>sp</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  addend2 <span class="op">=</span> <span class="op">*--</span>sp</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> addend1 <span class="op">+</span> addend2</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  jump <span class="op">*(*++</span>ip<span class="op">)</span></span></code></pre></div>
+<p>Man sieht, dass hier eine extra indirection ist (deswegen auch
+<code>jump *(*++ip)</code>, mit 2mal deref <code>*</code>). Performance
+ist dadurch natürlich zwangsweise schlechter als bei direct threaded
+code, da schließlich eine pointer-deref mehr berechnet werden muss.</p>
+<p>Der Vorteil ist allerdings ein kompakterer Code: Wenn beispielsweise
+<code>push</code> eine Implementation von 10 Zeilen hätte, dann würde
+das beim <strong>direct</strong> threaded code insgesamt
+<strong>20</strong> Zeilen hinzufügen (2 * 10), bei
+<strong>indirect</strong> aber nur 10, da die Implementation
+"ausgelagert" wurde. Das funktioniert deswegen, da man jetzt
+Maschinencode selbst Parameter handeln kann, das sieht man z. B. bei
+<code>i_pushA</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>i_pushA<span class="op">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>push</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>A</span></code></pre></div>
+<p><code>&amp;A</code> wird hier ausschließlich als Parameter für
+<code>push</code> verwendet. Da <code>&amp;push</code> am Anfang von
+<code>i_pushA</code> steht, wird auch dorthin gesprungen:
+<code>*ip -&gt; i_pushA, **ip -&gt; *i_pushA -&gt; push</code>. Bedeutet
+es wird nie (sinnvoller weise) auf die Adresse von <code>A</code>
+gesprungen, sondern nur in der Implementation von <code>push</code> dann
+selbst dereferenziert und als <strong>Wert</strong> (in dem Fall für den
+Stack) verwendet:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>push<span class="op">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> <span class="op">*(*</span>ip <span class="op">+</span> <span class="dv">1</span><span class="op">)</span></span></code></pre></div>
+<p><code>*ip + 1 -&gt; i_pushA + 1 -&gt; &amp;A, *(*ip + 1) -&gt; *(i_pushA + 1) -&gt; *(&amp;A) -&gt; A</code></p>
+<h3 id="token-threaded-code">token threaded code</h3>
+<p>Im Grunde noch eine zweite Art von indirection. Jetzt geht es im
+Grunde um folgenden Fall:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>thread<span class="op">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>pushA</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>pushA</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>add</span></code></pre></div>
+<p>In diesem Code wurde 2mal <code>pushA</code> referenziert. Ein
+Pointer hat natürlich selbst auch eine gewisse Größe (z. B. 8byte für
+64-Bit Systeme). Wir verbrauchen also in dem code-snippet oben insgesamt
+<code>3 * 8 = 3byte</code> (zur runtime). <em><strong>DAS IST VIEL ZU
+VIEL OMG</strong></em></p>
+<p>Als Lösung für dieses tragische Problem kann man also nun eine extra
+Tabelle erstellen, welche einfach alle Adressen aller verwendeten
+Funktionen auflistet. Greift man nun auf diese Tabelle per "index" zu,
+kann man sich demnach Platz sparen, jenachdem wie groß der Datentyp für
+den Index ist.</p>
+<p>Bsp: Index hat 1bit Größe (i.e. 2 Einträge in der Tabelle
+möglich)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>thread<span class="op">:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>table<span class="op">:</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>add</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">&amp;</span>pushA</span></code></pre></div>
+<p>Hiermit verbrauchen wir also nur noch mehr
+<code>(2 * 8) + (3 * 1) = 19bit &lt; 3 byte</code>. Eine unfassbare
+<code>~20%</code> runtime code-size reduction.</p>
+<p>Der Rest bleibt im Grunde gleich, ein vollständiges Bsp wäre:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>start<span class="op">:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  vpc <span class="op">=</span> <span class="op">&amp;</span>thread</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>dispatch<span class="op">:</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Convert the next bytecode operation </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">// to a pointer to machine code that implements it</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  addr <span class="op">=</span> decode<span class="op">(&amp;</span>vpc<span class="op">)</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Any inter-instruction operations are performed here </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">// (e.g. updating global state, event processing, etc)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  jump addr</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>CODE_PTR decode<span class="op">(</span>BYTE_CODE <span class="op">**</span>p<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">// In a more complex encoding, </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">// there may be multiple tables to choose between or control/mode flags</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> table<span class="op">[*(*</span>p<span class="op">)++];</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>thread<span class="op">:</span>  <span class="co">/* Contains bytecode, not machine addresses.  Hence it is more compact. */</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="dv">1</span> <span class="co">/*pushA*/</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="dv">2</span> <span class="co">/*pushB*/</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0</span> <span class="co">/*add*/</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>table<span class="op">:</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>add    <span class="co">/* table[0] = address of machine code that implements bytecode 0 */</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>pushA  <span class="co">/* table[1] ... */</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="op">&amp;</span>pushB  <span class="co">/* table[2] ... */</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>pushA<span class="op">:</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> A</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  jump dispatch</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>pushB<span class="op">:</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> B</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  jump dispatch</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>add<span class="op">:</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  addend1 <span class="op">=</span> <span class="op">*--</span>sp</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  addend2 <span class="op">=</span> <span class="op">*--</span>sp</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="op">*</span>sp<span class="op">++</span> <span class="op">=</span> addend1 <span class="op">+</span> addend2</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  jump dispatch</span></code></pre></div>
+<p>Wir haben also noch immer einen instruction pointer, allerdings zeigt
+dieser jetzt nicht mehr auf "echte" Adressen, sondern auf Indexe
+<code>-&gt;</code> und diese können wir gemeinsam mit der Tabelle
+verwenden um dann doch den Pointer vom Maschinencode zu bekommen.</p>
+<h3 id="indirect-token-threaded-code">indirect token threaded code</h3>
+<p>Einfach eine Kombination aus token threaded code und der vorherigen
+Beschreibung von <code>indirect</code> threaded code.</p>
+<ul class="incremental">
+<li><code>token</code> <code>-&gt;</code> Reduziert size beim
+referenzieren im call-thread</li>
+<li><code>indirect</code> <code>-&gt;</code> Reduziert size indem
+Maschinencode nicht (weniger) dupliziert werden muss</li>
+</ul>
+<h2 id="threaded-code-vergleich">Threaded Code Vergleich</h2>
+<p>Äquivalenter Code kann auf die verschiedenen threading Arten compiled
+werden. Allerdings macht es ja einen Unterschied auf welcher MiA ein
+Code ausgeführt wird. Diese Unterschiede in der MiA können dann sogar
+dazu führen, dass derselbe Code mit zb:</p>
+<ul class="incremental">
+<li><code>direct threaded</code> <strong>schneller</strong> als
+<code>subroutine threaded</code> auf Maschine <code>A</code> ist,
+aber</li>
+<li><code>direct threaded</code> <strong>langsamer</strong> als
+<code>subroutine threaded</code> auf Maschine <code>B</code> ist</li>
+</ul>
+<p>Man kann daher nicht per-se sagen, welche Threading-Art schneller ist
+(mit Außname, dass indirect natürlich immer langsamer als direct
+threading ist).</p>
+<p>TODO: Brauchen wir hier genauer die Beispiele aus den Folien mit den
+konkreten CPUs wissen?</p>
 <h1 id="forth">Forth</h1>
 <p>TODO</p>
 <h1 id="pascal-p4">Pascal P4</h1>

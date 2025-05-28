@@ -1,5 +1,8 @@
 # Prozessorarchitekturen
-Ein Prozessor "besteht" aus 2 verschiedenen Arten von Architekturen: **Befehlsarchitektur - instruction set architecture (ISA)** und die **Mikroarchitektur - microarchitecure**
+Ein Prozessor "besteht" aus 2 verschiedenen Arten von Architekturen: 
+
+- **Befehlsarchitektur - instruction set architecture (ISA)** 
+- und die **Mikroarchitektur - microarchitecure (MiA)**
 
 ## ISA
 References:
