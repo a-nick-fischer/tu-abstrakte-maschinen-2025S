@@ -236,7 +236,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 <body>
 <header id="title-block-header">
 <h1 class="title">Abstrakte Maschinen Ausarbeitung - 2025S</h1>
-<p class="date">2025-05-29 01:26</p>
+<p class="date">2025-06-22 14:44</p>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul class="incremental">
@@ -279,9 +279,37 @@ code</a></li>
 <li><a href="#registermaschinen" id="toc-registermaschinen">Registermaschinen</a></li>
 <li><a href="#dalvikvm" id="toc-dalvikvm">DalvikVM</a></li>
 <li><a href="#syntaxgesteuerte-editoren" id="toc-syntaxgesteuerte-editoren">Syntaxgesteuerte Editoren</a></li>
-<li><a href="#baummaschinen" id="toc-baummaschinen">Baummaschinen</a></li>
-<li><a href="#prologmaschinen" id="toc-prologmaschinen">Prologmaschinen</a></li>
-<li><a href="#funktionale-sprachen" id="toc-funktionale-sprachen">Funktionale Sprachen</a></li>
+<li><a href="#baummaschinen" id="toc-baummaschinen">Baummaschinen</a>
+<ul class="incremental">
+<li><a href="#prolog" id="toc-prolog">Prolog</a>
+<ul class="incremental">
+<li><a href="#ausführung" id="toc-ausführung">Ausführung</a></li>
+<li><a href="#datenrepräsentation" id="toc-datenrepräsentation">Datenrepräsentation</a></li>
+<li><a href="#optimierungen-der-abstrakten-maschinen" id="toc-optimierungen-der-abstrakten-maschinen">Optimierungen der
+Abstrakten Maschinen</a></li>
+</ul></li>
+<li><a href="#warren-abstract-machine-wam" id="toc-warren-abstract-machine-wam">Warren Abstract Machine
+(WAM)</a></li>
+<li><a href="#vienna-abstract-machine-vam" id="toc-vienna-abstract-machine-vam">Vienna Abstract Machine (VAM)</a>
+<ul class="incremental">
+<li><a href="#vam_2p" id="toc-vam_2p">VAM_2p</a></li>
+<li><a href="#vam_1p" id="toc-vam_1p">VAM_1p</a></li>
+<li><a href="#vam_ai" id="toc-vam_ai">VAM_AI</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#funktionale-sprachen" id="toc-funktionale-sprachen">Funktionale Sprachen</a>
+<ul class="incremental">
+<li><a href="#symbolische-darstellung" id="toc-symbolische-darstellung">Symbolische Darstellung</a></li>
+<li><a href="#lambda-kalkül" id="toc-lambda-kalkül"><span class="math inline"><em>λ</em></span>-Kalkül</a></li>
+<li><a href="#interpreter-im-lambda-kalkül" id="toc-interpreter-im-lambda-kalkül">Interpreter im
+Lambda-Kalkül</a></li>
+<li><a href="#die-secd-abstrakte-maschine" id="toc-die-secd-abstrakte-maschine">Die SECD Abstrakte Maschine</a>
+<ul class="incremental">
+<li><a href="#speicher" id="toc-speicher">Speicher</a></li>
+<li><a href="#register" id="toc-register">Register</a></li>
+<li><a href="#instruktionen-1" id="toc-instruktionen-1">Instruktionen</a></li>
+</ul></li>
+</ul></li>
 </ul>
 </nav>
 <h1 id="aufbau-von-interpretern">Aufbau von Interpretern</h1>
@@ -798,9 +826,265 @@ konkreten CPUs wissen?</p>
 <p>TODO</p>
 <h1 id="baummaschinen">Baummaschinen</h1>
 <p>TODO</p>
-<h1 id="prologmaschinen">Prologmaschinen</h1>
-<p>TODO</p>
+<h2 id="prolog">Prolog</h2>
+<p>Ein Program ist quasi wie ein Beweis. Eine fundamentale Datenstruktur
+ist die Liste. Diese wird mit <code>[]</code> dargestellt. Auf
+Listenelemente kann man mit <code>[Head|Tail]</code> zugreifen wobei
+<code>Head</code> das erste Element und <code>Tail</code> alle weiteren
+enthält.</p>
+<h4 id="variablen">Variablen</h4>
+<p>Werden EIMALIG an einen Wert gebunden. Schlägt ein Ast der
+Beweisführung/Programmausführung fehl, wird ein Backtracking betrieben
+und die Variablenbindungen zurückgesetzt.</p>
+<h4 id="regeln">Regeln</h4>
+<p>Regeln (auch Prozeduren genannt) werden so, als Fakten:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode Prolog"><code class="sourceCode prolog"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>head(stat<span class="kw">,</span> stat)<span class="kw">.</span></span></code></pre></div>
+<p>oder so als Statements</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode Prolog"><code class="sourceCode prolog"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>head(stat<span class="kw">,</span> stat) <span class="kw">:-</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    body1(stat<span class="kw">,</span> stat)<span class="kw">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    body2(stat<span class="kw">,</span> stat)<span class="kw">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    bodyn(stat<span class="kw">,</span> stat)<span class="kw">.</span></span></code></pre></div>
+<p>definiert. Dabei müssen, damit im 2. Bsp. <code>head</code> bewiesen
+ist, alle Subgoals des bodies bewiesen werden.</p>
+<h3 id="ausführung">Ausführung</h3>
+<h4 id="resulution">Resulution</h4>
+<p>Geht von oben nach unten, links nach rechts und versucht die Goals zu
+beweisen. (Ausführungsreihenfolge)</p>
+<h4 id="unification">Unification</h4>
+<p>Bindet die freien Variablen. Generell liefert die Unifikation
+<code>true</code>, wenn für</p>
+<ul class="incremental">
+<li>Konstanten beide den gleichen Wert besitzen.</li>
+<li>Strukturen beide den gleichen Namen, Arität haben und alle Argumente
+ebenfalls Unifizieren.</li>
+<li>freie Variablen keine Bedingung gilt. Liefert immer
+<code>true</code> und beide Variablen werden aneinander gebunden.</li>
+<li>eine Variable und eine Konstante/Struktur keine Bedingung gilt.
+Liefert immer <code>true</code> und die Konstante/Struktur wird an die
+Variable gebunden Wenn eine Struktur rekursiv ist kann man entweder
+<code>false</code> zurückgeben oder mit diesen &quot;infinite terms&quot;
+arbeiten.</li>
+</ul>
+<h5 id="implementierung">Implementierung</h5>
+<p>Mithilfe von Pointern recht einfach realisierbar, in dem einfach
+dieser auf das jeweilige Objekt zeigt.</p>
+<h3 id="datenrepräsentation">Datenrepräsentation</h3>
+<p>Da Prolog dynamisch Getypt ist, muss für jedes Objekt ein Tupel von
+<code>(tag, value)</code> gespeichert werden. Prolog hat folgende
+Basistypen:</p>
+<ul class="incremental">
+<li>atom (Zeichenketten)</li>
+<li>integer</li>
+<li>structure (terme mit namen, arität)</li>
+<li>unbound variable</li>
+<li>reference Strukturen werden als Liste dargestellt und Funktoren
+innerhalb dieser mit dem reference typ verknüpft. Eine etwas bessere
+Darstellung bekommt man mitilfe der &quot;Tagged Pointer Darstellung&quot;, wo die
+Pointer z.B. einer <code>List</code> einen Tag ebensolchen Tag haben.
+Freie Variablen werden als Selbstreferenz dargestellt.</li>
+</ul>
+<h4 id="datenbereiche">Datenbereiche</h4>
+<h5 id="environment-stack">Environment stack</h5>
+<p>Die Abarbeitung der Resolution liefert einen Stack. Dieser
+Rerpäsentiert gleichzeitig den AND-OR-Tree des Beweises. Für jeden
+Aufrufs einer Regel wird ein neuer Stackframe angelegt.</p>
+<h5 id="trail">Trail</h5>
+<p>Speichert die Adressen der Variablen die gebunden wurden. Resetted
+alle diese Variablen beim Backtracking.</p>
+<h5 id="copy-stack-heap">Copy Stack (Heap)</h5>
+<p>Speichert die Strukturen.</p>
+<h4 id="stackframes">Stackframes</h4>
+<h5 id="deterministischer-stackframe">Deterministischer Stackframe</h5>
+<p>Im Prinzip aufgebaut wie ein normaler Stackframe mit dynamic link
+(callers frame) und return address (callers goal).</p>
+<h5 id="choicepoint">Choicepoint</h5>
+<p>Speichert zusätzlich alternativen (in der Code area). Außerdem
+speichert er den state des trail und copy stacks um diese resetten zu
+können. Hat zusätzlich noch einen previous choice point (dynamic
+link).</p>
+<h3 id="optimierungen-der-abstrakten-maschinen">Optimierungen der
+Abstrakten Maschinen</h3>
+<h5 id="variablen-klassifikation">Variablen Klassifikation</h5>
+<p>Variablen die nur ein mal in einer Regel vorkommen können nur
+geschrieben werden und somit eliminiert. Temporäre Variablen kommen nur
+in einem Subgoal vorkommen können in einem Register gehalten werden.
+Lokale Variablen werden im Stackframe gespeichert.</p>
+<h5 id="clause-indexing">Clause Indexing</h5>
+<p>Vergleiche erste Variable von Head und Goal ?????? TODO</p>
+<h4 id="last-call-optimization">Last Call Optimization</h4>
+<p>Versucht Speicher zu sparen in dem Stackframes nach Möglichkeit
+übereinandergelegt werden.</p>
+<h2 id="warren-abstract-machine-wam">Warren Abstract Machine (WAM)</h2>
+<p>Ist aufgebaut wie die Implementierung einer Imperativen
+Programmiersprache (argument registers, parameter passing, etc). Hat
+genau so die Datenbereiche wie oben beschrieben. Hat allerdings noch ein
+paar zusätzliche Hilfsregister</p>
+<ul class="incremental">
+<li>CP continuation program pointer (fungiert wie eine
+Rücksprungadresse/Link Register in RISC)</li>
+<li>B (backtrack point) der letze choice point</li>
+<li>TR top of trail</li>
+<li>A top of stack</li>
+<li>E frame pointer (environment pointer)</li>
+<li>H top of heap</li>
+<li>S current structure being unified</li>
+</ul>
+<h4 id="instruktionen">Instruktionen</h4>
+<p>Mit <code>put_value(Vn, Ri)</code> wird eine Variable in ein Register
+geschrieben (erstes Auftreten), ist eine Kopieroperation. Mit
+<code>get_variable(Vn, Ri)</code> wird eine Variable in ein Register
+geschrieben (weiteres Auftreten), ist die Unifikation Mit
+<code>unify_constant C</code> wird eine Konstante Unifiziert. (Falls
+Argumente einer Regel Strukturen sind) Hier wird unterschieden zwischen
+Read und Write Mode, da einmal mit einer Struktur unifiziert wird und
+einmal mit einer Freien Variable, was einem Assign gleichkommt.
+<code>call</code> funktioniert wie <code>call, ret</code></p>
+<h5 id="indexing">Indexing</h5>
+<p>????</p>
+<h4 id="choicepoint-1">Choicepoint</h4>
+<p>Speichert neben den Pointer Registern auch die Argument Register.</p>
+<h4 id="binary-prolog">Binary Prolog</h4>
+<p>Hat nur ein Subgoal. Somit gibt es keine lokalen Variablen sondern
+nur temporäre. Ist eine Vereinfachte WAM.</p>
+<h2 id="vienna-abstract-machine-vam">Vienna Abstract Machine (VAM)</h2>
+<p>Versucht das Paramter Passing bottleneck der WAM zu eliminieren. Es
+gibt:</p>
+<ul class="incremental">
+<li>VAM_2p für interpreter</li>
+<li>VAM_1p für compiler</li>
+<li>VAM_ai für abstract interpretation (sammelt analyseinformation für
+VAM_1p)</li>
+</ul>
+<h3 id="vam_2p">VAM_2p</h3>
+<p>Hat 2 Instruction Pointer. Einer für ein Subgoal, der andere für den
+Head. Dabei wir immer eine kombinierte instruktion sprich</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(*</span>goalptr<span class="op">++</span> <span class="op">+</span> <span class="op">*</span>headptr<span class="op">++)</span></span></code></pre></div>
+<p>ausgeführt. Da man nun 2 IP hat hat man entsprechend nun jeweils 2
+Pointer in die Code Area und den Envrionment stack, einen für
+<code>goal</code>, den anderen für <code>head</code>.</p>
+<h3 id="vam_1p">VAM_1p</h3>
+<p>Kombiniert die beiden Instruktionen der VAM_2p zur compile Zeit.</p>
+<h3 id="vam_ai">VAM_AI</h3>
+<p>Sammelt informationen zu Reference Chain Lengths (0, 1, &gt;1) und
+Alias Information von Variablen.</p>
 <h1 id="funktionale-sprachen">Funktionale Sprachen</h1>
+<h2 id="symbolische-darstellung">Symbolische Darstellung</h2>
+<p>In funktionalen Sprachen haben Tupel/Listen eine große Bedeutung. Als
+notation werden entweder Bäume, durch <code>,</code> separierte Listen
+<code>(A,B,C)</code> in Lisp-ähnlichen sprachen durch <code> </code>
+separierte Listen <code>((A B C) D (E F G))</code> oder durch die
+Dot-Notation die die Liste in Element und Restliste teilt dargestellt
+<code>(A.(B.C))</code>. Die Dot-Notation ist leicht zu implementieren,
+unterstützt aber pro Knoten immer nur zwei Kinder. In Implementierungen
+von Funktionalen sprachen ist sind vor allem zwei bezeichnungen für
+first/head/left und last/tail/right geläufig. <code>car</code> und
+<code>cdr</code>. Bsp: <code>car(cdr(cdr(l)))</code> stellt das 3.
+Element der Liste <code>l</code> dar.</p>
+<h2 id="lambda-kalkül"><span class="math inline"><em>λ</em></span>-Kalkül</h2>
+<p>Der Lambda-Kalkül ist eines der Einfachsten Programiersprachen. Es
+besteht nur aus Variablen <code>a, b, ..., z</code> und Funktionen der
+Gestalt <span class="math inline"><em>λ</em></span><code>&lt;args&gt;.&lt;body&gt;</code>
+wo <code>&lt;args&gt;</code> Variablen und <code>&lt;body&gt;</code>
+eine Funktion oder Variablen sind. Als letztes gibt des noch die
+Anwendung einer Funktion auf eine Funktion oder Variablen:
+<code>(&lt;func&gt;&lt;args&gt;)</code>. Zum Rechnen gibt es 3
+Regeln:</p>
+<ol class="incremental" type="1">
+<li><span class="math inline"><em>α</em></span>-Reduktion: <span class="math inline"><em>λ</em><em>u</em>.<em>e</em> ≡ <em>λ</em><em>v</em>.[<em>v</em>/<em>u</em>]<em>e</em>  <em>v</em> ∉ <em>f</em><em>v</em>(<em>e</em>)</span></li>
+<li><span class="math inline"><em>β</em></span>-Reduktion: <span class="math inline">(<em>λ</em><em>v</em>.<em>f</em>)<em>e</em> ≡ [<em>e</em>/<em>v</em>]<em>f</em></span></li>
+<li><span class="math inline"><em>η</em></span>-Reduktion: <span class="math inline"><em>λ</em><em>v</em>.(<em>e</em><em>v</em>) ≡ <em>e</em>  <em>v</em> ∉ <em>f</em><em>v</em>(<em>e</em>)</span></li>
+</ol>
+<h4 id="normalform">Normalform</h4>
+<p>Ein lambda-Ausruck ist in Normalform wenn keine Beta- oder
+Etareduktion mehr angewandt werden kann.</p>
+<h4 id="auswertungsreihenfolge">Auswertungsreihenfolge</h4>
+<p>Es kann bei der Auswertung der Ausdrücke passieren, dass zu
+bestimmten Zeitpunkten unterschiedliche Reduktionen möglich sind. Dabei
+ist für das Endergebnis egal welcher Ausdruck zuerst reduziert wird.
+Allerdings können bestimmte Reduktionsreihenfolgen nie terminieren.</p>
+<h2 id="interpreter-im-lambda-kalkül">Interpreter im Lambda-Kalkül</h2>
+<p>Die Frage die sich logischerweise mit der Möglichkeit einer
+Programmiersprache stellt ist, ob sie mächtig genug ist sich selbst als
+berechenbare Funktion zu beschreiben, dh. ob es möglich ist eine
+Funktion <code>eval()</code> zu schreiben die angewendet auf einen
+beliebigen Ausdruck <code>E</code> diesen so weit wie möglich reduziert
+und das Ergebnis retourniert. Dies ist in der tat möglich, außerdem gilt
+auch <code>eval(E) = eval(eval(E))</code>.</p>
+<h2 id="die-secd-abstrakte-maschine">Die SECD Abstrakte Maschine</h2>
+<h3 id="speicher">Speicher</h3>
+<p>Nachdem Funktionale Sprachen stark auf Listen aufbauen macht es Sinn,
+das der Speicher ebenfalls diese Datenstruktur unterstützt. Dabei wird
+der Speicher in Zellen unterteilt, die jeweils aus einer fixen Anzahl an
+Speicher Bits bestehen. Jede Zelle ist außerdem eindeutig addressierbar.
+Ein Tag beschreibt wie die Zelle zu interpretieren ist, dh. ob die Zelle
+ein Nonterminal <code>cons</code> oder ein Terminal zb
+<code>integer</code> darstellt. Für <code>cons</code> Zellen ist somit
+der Speicherbereich in die Felder <code>car</code> und <code>cdr</code>
+aufgeteilt. Ein Pointer mit dem Wert<code>0 (NIL)</code> ist ungültig
+und somit nicht als Adresse nutzbar.</p>
+<h3 id="register">Register</h3>
+<h4 id="s-register-stack-register">S-Register (Stack Register)</h4>
+<p>Das S-Register zeigt auf eine Liste im Speicher die wie ein Stack
+agiert, allerdings als Linked-List implementiert ist. Wird also etwas
+vom Stack gepoppt und gepushed verbleibt der alte Wert als Garbage im
+Speicher und muss von einem GC eingesammelt werden sollte er nicht mehr
+gebraucht werden. Der Stack wird vor allem für <code>built-in</code>
+Funktionen wie <code>+ - h x/ car cdr</code> genutzt.</p>
+<h4 id="e-register-environment-register">E-Register (Environment
+Register)</h4>
+<p>Das E-Regitser zeigt auf eine Liste der Argumente der aktuellen
+Funktion.</p>
+<h4 id="c-register-control-pointer">C-Register (Control Pointer)</h4>
+<p>Hat das gleiche verhalten wie ein Program Counter in einem Computer.
+Zeigt auf die nächste auszuführende Instruktion.</p>
+<h4 id="d-register-dump-register">D-Register (Dump Register)</h4>
+<p>Zeigt auf eine Liste namens dump. Der dump hat die Aufgabe den
+Zustand einer Funktion zu Speichern wenn innerhalb der Funktion noch
+eine Funktion aufgerufen wird. Das wird erreicht in dem der Inhalt des
+S, E und C Registers auf diesen dump/stack geschrieben wird und diese
+nach der Beeindigung der Funktion wieder in die entsprechenden Register
+gepoppt werden.</p>
+<h3 id="instruktionen-1">Instruktionen</h3>
+<p>Instruktionen sind einfache Integer Werte meist ohne Argumente. (Byte
+Code ähnlich) Sie manipulieren die Register in eine vorgegebene Art und
+Weise. Dabei gibt es zirka 6 Gruppen an Instruktionen:</p>
+<ol class="incremental" type="1">
+<li>Werte/Objekte auf den S Stack schreiben</li>
+<li>Builtin Auswertungen auf dem S Stack durchführen.</li>
+<li>If-then-else Behandlung</li>
+<li>Non-Rekursive Funktionsbehandlung/Aufrufe</li>
+<li>Rekursive Funktionsbehandlung</li>
+<li>I/O Die ersten zwei Kategorien funktionieren wie in einem normalen
+Computer auch.</li>
+</ol>
+<h5 id="if-then-else">If-then-else</h5>
+<p>ITE hingegen braucht etwas speziellere Behandlung. Hierfür gibt es
+zwei Instruktionen <code>SEL</code> und <code>JOIN</code>.
+<code>SEL</code> schaut auf den obersten Wert am Stack und schaut ob
+dieser 0 ist oder nicht (boolean). Anschließend wird entweder der
+nächste Wert in der Instruktionsliste (C-Register) dorthin geladen oder
+der Else Block genommen und der Übernächste wert in das C-Register
+geschrieben. Außerdem wird der <code>cdr</code> dieses else Zweigs auf
+den Stack gepushed um später mithilfe eines <code>JOIN</code> wieder in
+das C-Register gepoppt werden zu können. Beispielsweise wird
+<code>if null(x) then 10 else -10</code> als Codeliste zu
+<code>(NULL SEL (LDC 10 JOIN)(LDC -10 JOIN))</code> übersetzt.</p>
+<h5 id="nicht-rekursive-funktionen">Nicht-rekursive Funktionen</h5>
+<p>Bestehen aus einer Liste von Argumenten, dem
+<code>LDF (load function)</code> befehl, dem Function Body, wobei der
+letzte Befehl des Body ein <code>RTN</code> sein muss und dem
+<code>AP (apply)</code> Befehl. Im allgemeinen wird eine Funktion erst
+mit einem <code>AP</code> ausgewertet. Dafür müssen allerdings zuerst
+die Argumente dieser Funktion ausgewertet werden. <code>AP</code> pushed
+cddr(S), E und cdr(C) auf den dump, setzt S auf <code>NIL</code>. C wird
+auf den Anfang des Function-body gesetzt. E wird auf <code>cons</code>
+des zweiten Element des ursprünglichen Stacks und <code>cdr</code> des
+Funktion bodies (eigentlich das Environment welches die Funktion selbst
+braucht) gesetzt. Wird nun ein <code>RTN</code> aufgerufen werden E und
+C direkt von dem Stack gepoppt und S wird der Pointer zu
+<code>cons</code> von dem alten S und dem Wert am Stack welcher das
+Ergebnis der Funktion repräsentiert.</p>
+<h5 id="rekursive-funktionen">Rekursive Funktionen</h5>
 <p>TODO</p>
 </body>
 </html>
